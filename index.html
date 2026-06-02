@@ -1,729 +1,878 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✨ Perhitungan Slip Gaji ✨</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --pink-light: #fce4ec;
-    --pink-mid: #f8bbd0;
-    --pink-main: #e91e8c;
-    --pink-soft: #ff80ab;
-    --pink-pale: #fff0f5;
-    --lavender: #ede7f6;
-    --lavender-mid: #d1c4e9;
-    --lavender-main: #9c27b0;
-    --mint: #e8f5e9;
-    --mint-mid: #c8e6c9;
-    --mint-main: #43a047;
-    --peach: #fff3e0;
-    --peach-mid: #ffe0b2;
-    --cream: #fffdf7;
-    --text-dark: #4a3f5c;
-    --text-mid: #7b6f8a;
-    --text-light: #b0a8bc;
-    --shadow-card: 0 4px 24px rgba(156,39,176,0.08);
-    --radius: 20px;
-    --radius-sm: 12px;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slip Gaji Karyawan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fef6f9;
+      color: #4a3f4f;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: linear-gradient(135deg, #fce4ec 0%, #ede7f6 50%, #e8f5e9 100%);
-    min-height: 100vh;
-    color: var(--text-dark);
-    padding: 20px;
-    position: relative;
-    overflow-x: hidden;
-  }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: -100px; left: -100px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(233,30,140,0.12) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -100px; right: -100px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(156,39,176,0.10) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+    }
 
-  .floating-shapes {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .shape {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.18;
-    animation: floatShape 8s ease-in-out infinite;
-  }
-  .shape:nth-child(1) { width:80px;height:80px; background:#ff80ab; top:10%;left:5%; animation-delay:0s; }
-  .shape:nth-child(2) { width:50px;height:50px; background:#d1c4e9; top:30%;right:8%; animation-delay:2s; }
-  .shape:nth-child(3) { width:65px;height:65px; background:#c8e6c9; bottom:20%;left:10%; animation-delay:4s; }
-  .shape:nth-child(4) { width:40px;height:40px; background:#ffe0b2; top:60%;right:5%; animation-delay:1s; }
-  @keyframes floatShape {
-    0%,100%{transform:translateY(0) rotate(0deg);}
-    50%{transform:translateY(-20px) rotate(10deg);}
-  }
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #4a3f4f;
+      margin-bottom: 8px;
+    }
 
-  .wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
+    .header p {
+      color: #7a6b80;
+      font-size: 0.875rem;
+    }
 
-  .header {
-    text-align: center;
-    margin-bottom: 32px;
-    animation: slideDown 0.6s ease;
-  }
-  @keyframes slideDown { from{opacity:0;transform:translateY(-30px);} to{opacity:1;transform:translateY(0);} }
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(245, 165, 184, 0.15);
+      border: 1px solid #f5d4e0;
+    }
 
-  .header-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #f8bbd0, #d1c4e9);
-    color: #9c27b0;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 6px 20px;
-    border-radius: 50px;
-    margin-bottom: 14px;
-  }
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    background: linear-gradient(135deg, #e91e8c 0%, #9c27b0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-  }
-  .header p { color: var(--text-mid); font-size: 0.95rem; margin-top: 8px; }
-  .header-icon { font-size: 2.4rem; margin-bottom: 8px; display: block; animation: bounce 2s ease-in-out infinite; }
-  @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #4a3f4f;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f5d4e0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-  .card {
-    background: rgba(255,255,255,0.82);
-    backdrop-filter: blur(16px);
-    border: 1.5px solid rgba(248,187,208,0.4);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-card);
-    padding: 32px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.5s ease both;
-  }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+    .card-title .icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
 
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .icon-pill {
-    display: flex; align-items: center; justify-content: center;
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-  }
-  .pill-pink { background: var(--pink-light); }
-  .pill-lavender { background: var(--lavender); }
-  .pill-mint { background: var(--mint); }
+    .icon-pink { background-color: #fce4ec; }
+    .icon-peach { background-color: #fff3e0; }
+    .icon-lavender { background-color: #f3e5f5; }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  @media(max-width:640px) {
-    .grid-2 { grid-template-columns: 1fr; }
-    .card { padding: 20px; }
-  }
+    /* Form */
+    .form-group {
+      margin-bottom: 16px;
+    }
 
-  .field { display: flex; flex-direction: column; gap: 7px; }
-  label {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--text-mid);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-  .input-wrap { position: relative; }
-  .input-prefix {
-    position: absolute;
-    left: 14px; top: 50%; transform: translateY(-50%);
-    font-size: 0.85rem;
-    color: var(--text-light);
-    font-weight: 700;
-    pointer-events: none;
-  }
-  input[type="text"], input[type="number"], input[type="month"] {
-    width: 100%;
-    border: 1.5px solid #f8bbd0;
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
-    color: var(--text-dark);
-    background: rgba(255,255,255,0.9);
-    outline: none;
-    transition: all 0.25s;
-    appearance: none;
-  }
-  input.has-prefix { padding-left: 36px; }
-  input:focus {
-    border-color: #e91e8c;
-    box-shadow: 0 0 0 3px rgba(233,30,140,0.12);
-    background: #fff;
-  }
-  input:hover { border-color: #ff80ab; }
-  input::placeholder { color: var(--text-light); }
-  input[type="number"] { -moz-appearance: textfield; }
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #7a6b80;
+      margin-bottom: 8px;
+    }
 
-  .btn-group { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    border-radius: 50px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn:active { transform: scale(0.97); }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #f5d4e0;
+      border-radius: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      background-color: #fef0f5;
+      color: #4a3f4f;
+      transition: all 0.2s ease;
+    }
 
-  .btn-primary {
-    background: linear-gradient(135deg, #e91e8c 0%, #9c27b0 100%);
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(233,30,140,0.35);
-  }
-  .btn-primary:hover { box-shadow: 0 8px 28px rgba(233,30,140,0.45); transform: translateY(-2px); }
+    .form-input:hover, .form-select:hover {
+      border-color: #f5a5b8;
+    }
 
-  .btn-secondary {
-    background: white;
-    color: var(--text-mid);
-    border: 1.5px solid #f8bbd0;
-    box-shadow: 0 4px 12px rgba(233,30,140,0.08);
-  }
-  .btn-secondary:hover { border-color: #e91e8c; color: #e91e8c; transform: translateY(-2px); }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: #f5a5b8;
+      box-shadow: 0 0 0 3px rgba(245, 165, 184, 0.2);
+    }
 
-  .btn-mint {
-    background: linear-gradient(135deg, #43a047 0%, #26a69a 100%);
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(67,160,71,0.3);
-  }
-  .btn-mint:hover { box-shadow: 0 8px 28px rgba(67,160,71,0.4); transform: translateY(-2px); }
+    .form-input.error {
+      border-color: #f87171;
+      background-color: #fef2f2;
+    }
 
-  .error-msg {
-    display: none;
-    background: linear-gradient(135deg, #fce4ec, #fff0f5);
-    border: 1.5px solid #f48fb1;
-    border-radius: var(--radius-sm);
-    padding: 14px 18px;
-    color: #c62828;
-    font-size: 0.88rem;
-    font-weight: 600;
-    margin-top: 12px;
-    animation: shake 0.4s ease;
-  }
-  @keyframes shake {
-    0%,100%{transform:translateX(0);}
-    25%{transform:translateX(-6px);}
-    75%{transform:translateX(6px);}
-  }
-  .error-msg.show { display: flex; gap: 8px; align-items: flex-start; }
+    .error-text {
+      color: #f87171;
+      font-size: 0.75rem;
+      margin-top: 4px;
+    }
 
-  .result-section { display: none; animation: fadeUp 0.5s ease; }
-  .result-section.show { display: block; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-  .slip {
-    background: rgba(255,255,255,0.97);
-    border: 2px solid #f8bbd0;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 12px 48px rgba(233,30,140,0.14);
-  }
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
 
-  .slip-header {
-    background: linear-gradient(135deg, #e91e8c 0%, #9c27b0 100%);
-    padding: 28px 32px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-  }
-  .slip-header::before {
-    content: '✦';
-    position: absolute;
-    font-size: 120px;
-    right: -20px; top: -30px;
-    opacity: 0.1;
-    font-family: serif;
-  }
-  .slip-company { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: 0.85; margin-bottom: 4px; }
-  .slip-title { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; margin-bottom: 2px; }
-  .slip-period { font-size: 0.88rem; opacity: 0.85; font-weight: 500; }
-  .slip-deco { display: flex; gap: 6px; margin-top: 12px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); }
-  .dot.a { background: white; }
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-  .slip-emp {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px 32px;
-    background: #fff0f5;
-    border-bottom: 1.5px dashed #f8bbd0;
-  }
-  .emp-avatar {
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #e91e8c, #9c27b0);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
-    flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(233,30,140,0.25);
-  }
-  .emp-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--text-dark); }
-  .emp-pos { font-size: 0.82rem; color: var(--text-mid); font-weight: 600; margin-top: 2px; }
+    .btn-primary {
+      background: linear-gradient(135deg, #f5a5b8, #e896ab);
+      color: white;
+      flex: 1;
+    }
 
-  .slip-body { padding: 24px 32px; }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(245, 165, 184, 0.4);
+    }
 
-  .sec-label {
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-light);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .sec-label::after { content: ''; flex: 1; height: 1px; background: #f8bbd0; opacity: 0.5; }
+    .btn-secondary {
+      background-color: #f8e8ee;
+      color: #7a6b80;
+    }
 
-  .slip-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(248,187,208,0.25);
-    gap: 12px;
-  }
-  .slip-row:last-child { border-bottom: none; }
-  .s-label { font-size: 0.9rem; color: var(--text-mid); font-weight: 500; }
-  .s-label small { display: block; font-size: 0.75rem; color: var(--text-light); }
-  .s-val { font-weight: 700; font-size: 0.92rem; color: var(--text-dark); text-align: right; white-space: nowrap; }
-  .s-val.inc { color: #43a047; }
-  .s-val.ded { color: #e53935; }
+    .btn-secondary:hover {
+      background-color: #f5d4e0;
+    }
 
-  .total-box {
-    display: flex; justify-content: space-between;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    margin: 12px 0;
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  .total-gross { background: #e8f5e9; color: #43a047; }
-  .total-ded { background: #ffebee; color: #e53935; }
+    .btn-success {
+      background: linear-gradient(135deg, #b8e8c8, #7fc99a);
+      color: white;
+    }
 
-  .thp-box {
-    background: linear-gradient(135deg, #e91e8c 0%, #9c27b0 100%);
-    border-radius: var(--radius-sm);
-    padding: 20px 24px;
-    margin-top: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .thp-box::before { content: '★'; position: absolute; font-size: 80px; right: 10px; top: -10px; opacity: 0.1; }
-  .thp-lbl { color: rgba(255,255,255,0.9); font-size: 0.88rem; font-weight: 600; }
-  .thp-lbl strong { display: block; color: white; font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
-  .thp-val { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white; text-align: right; }
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(127, 201, 154, 0.4);
+    }
 
-  .slip-footer {
-    padding: 16px 32px;
-    background: #fff0f5;
-    border-top: 1.5px dashed #f8bbd0;
-    text-align: center;
-  }
-  .slip-footer p { font-size: 0.78rem; color: var(--text-light); font-style: italic; }
-  .footer-hearts { font-size: 1rem; letter-spacing: 6px; margin-bottom: 4px; }
+    .btn-danger {
+      background-color: #fecaca;
+      color: #dc2626;
+    }
 
-  @media print {
-    body { background: white; padding: 0; }
-    .floating-shapes, .header, .input-card, .btn-group { display: none !important; }
-    .result-section { display: block !important; }
-    .slip { box-shadow: none; border: 1px solid #ddd; }
-    .wrapper { max-width: 100%; }
-    .card { box-shadow: none; border: none; }
-    @page { margin: 1cm; }
-  }
+    .btn-danger:hover {
+      background-color: #fca5a5;
+    }
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #fce4ec; }
-  ::-webkit-scrollbar-thumb { background: #f8bbd0; border-radius: 4px; }
-</style>
+    /* Slip Gaji */
+    .slip-container {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .slip-container.show {
+      display: block;
+    }
+
+    .slip {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(245, 165, 184, 0.15);
+      border: 1px solid #f5d4e0;
+    }
+
+    .slip-header {
+      background: linear-gradient(135deg, #f5a5b8, #ffd4b8);
+      padding: 24px;
+      text-align: center;
+      color: white;
+    }
+
+    .slip-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .slip-header p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    .slip-body {
+      padding: 24px;
+    }
+
+    .employee-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed #f5d4e0;
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 0.75rem;
+      color: #7a6b80;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4a3f4f;
+    }
+
+    .slip-section {
+      margin-bottom: 20px;
+    }
+
+    .slip-section-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #4a3f4f;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .slip-section-title.pendapatan {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .slip-section-title.potongan {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+
+    .slip-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+    }
+
+    .slip-item:nth-child(even) {
+      background-color: #fef6f9;
+      border-radius: 6px;
+    }
+
+    .slip-item .label {
+      color: #7a6b80;
+    }
+
+    .slip-item .value {
+      font-weight: 500;
+      color: #4a3f4f;
+    }
+
+    .slip-total {
+      background: linear-gradient(135deg, #b8e8c8, #dcfce7);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .slip-total .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+    }
+
+    .slip-total .total-row:last-child {
+      margin-bottom: 0;
+      padding-top: 12px;
+      border-top: 2px solid rgba(127, 201, 154, 0.3);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #166534;
+    }
+
+    /* History */
+    .history-container {
+      margin-top: 30px;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .history-table th {
+      background-color: #f8e8ee;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #4a3f4f;
+    }
+
+    .history-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f5d4e0;
+      color: #7a6b80;
+    }
+
+    .history-table tr:hover {
+      background-color: #fef6f9;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .slip-container {
+        display: block !important;
+        margin: 0;
+      }
+
+      .slip {
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .employee-info {
+        grid-template-columns: 1fr;
+      }
+
+      .history-table {
+        font-size: 0.75rem;
+      }
+
+      .history-table th, .history-table td {
+        padding: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header no-print">
+      <h1>Slip Gaji Karyawan</h1>
+      <p>Hitung dan cetak slip gaji dengan mudah</p>
+    </div>
 
-<div class="floating-shapes">
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
-  <div class="shape"></div>
-</div>
+    <!-- Form Section -->
+    <form id="salaryForm" class="no-print">
+      <!-- Data Karyawan -->
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon icon-pink">&#128100;</span>
+          Data Karyawan
+        </h2>
+        <div class="form-group">
+          <label class="form-label">Nama Karyawan *</label>
+          <input type="text" id="namaKaryawan" class="form-input" placeholder="Masukkan nama lengkap">
+          <p class="error-text" id="errorNama"></p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Jabatan *</label>
+          <input type="text" id="jabatan" class="form-input" placeholder="Masukkan jabatan">
+          <p class="error-text" id="errorJabatan"></p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Periode Gaji *</label>
+          <div class="form-row">
+            <select id="periodeBulan" class="form-select">
+              <option value="1">Januari</option>
+              <option value="2">Februari</option>
+              <option value="3">Maret</option>
+              <option value="4">April</option>
+              <option value="5">Mei</option>
+              <option value="6">Juni</option>
+              <option value="7">Juli</option>
+              <option value="8">Agustus</option>
+              <option value="9">September</option>
+              <option value="10">Oktober</option>
+              <option value="11">November</option>
+              <option value="12">Desember</option>
+            </select>
+            <select id="periodeTahun" class="form-select"></select>
+          </div>
+        </div>
+      </div>
 
-<div class="wrapper">
+      <!-- Komponen Pendapatan -->
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon icon-peach">&#128176;</span>
+          Komponen Pendapatan
+        </h2>
+        <div class="form-group">
+          <label class="form-label">Gaji Pokok *</label>
+          <input type="text" id="gajiPokok" class="form-input" placeholder="Rp 0">
+          <p class="error-text" id="errorGajiPokok"></p>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Uang Kehadiran</label>
+            <input type="text" id="uangKehadiran" class="form-input" placeholder="Rp 0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Uang Lembur</label>
+            <input type="text" id="uangLembur" class="form-input" placeholder="Rp 0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Bonus</label>
+          <input type="text" id="bonus" class="form-input" placeholder="Rp 0">
+        </div>
+      </div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <span class="header-icon">🌸</span>
-    <h1>Kalkulator Slip Gaji</h1>
+      <!-- Komponen Potongan -->
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon icon-lavender">&#128465;</span>
+          Komponen Potongan
+        </h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Potongan Keterlambatan</label>
+            <input type="text" id="potonganTerlambat" class="form-input" placeholder="Rp 0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Potongan Tidak Hadir</label>
+            <input type="text" id="potonganTidakHadir" class="form-input" placeholder="Rp 0">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">BPJS</label>
+            <input type="text" id="bpjs" class="form-input" placeholder="Rp 0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kasbon</label>
+            <input type="text" id="kasbon" class="form-input" placeholder="Rp 0">
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">
+          <span>&#128200;</span> Hitung Gaji
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+          <span>&#128260;</span> Reset
+        </button>
+      </div>
+    </form>
+
+    <!-- Slip Gaji -->
+    <div id="slipContainer" class="slip-container">
+      <div class="slip">
+        <div class="slip-header">
+          <h2>SLIP GAJI KARYAWAN</h2>
+          <p id="slipPeriode"></p>
+        </div>
+        <div class="slip-body">
+          <div class="employee-info">
+            <div class="info-item">
+              <span class="info-label">Nama Karyawan</span>
+              <span class="info-value" id="slipNama"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Jabatan</span>
+              <span class="info-value" id="slipJabatan"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Periode</span>
+              <span class="info-value" id="slipPeriodeInfo"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Tanggal Cetak</span>
+              <span class="info-value" id="slipTanggal"></span>
+            </div>
+          </div>
+
+          <div class="slip-section">
+            <div class="slip-section-title pendapatan">Pendapatan</div>
+            <div class="slip-item">
+              <span class="label">Gaji Pokok</span>
+              <span class="value" id="slipGajiPokok"></span>
+            </div>
+            <div class="slip-item">
+              <span class="label">Uang Kehadiran</span>
+              <span class="value" id="slipKehadiran"></span>
+            </div>
+            <div class="slip-item">
+              <span class="label">Uang Lembur</span>
+              <span class="value" id="slipLembur"></span>
+            </div>
+            <div class="slip-item">
+              <span class="label">Bonus</span>
+              <span class="value" id="slipBonus"></span>
+            </div>
+          </div>
+
+          <div class="slip-section">
+            <div class="slip-section-title potongan">Potongan</div>
+            <div class="slip-item">
+              <span class="label">Potongan Keterlambatan</span>
+              <span class="value" id="slipTerlambat"></span>
+            </div>
+            <div class="slip-item">
+              <span class="label">Potongan Tidak Hadir</span>
+              <span class="value" id="slipTidakHadir"></span>
+            </div>
+            <div class="slip-item">
+              <span class="label">BPJS</span>
+              <span class="value" id="slipBPJS"></span>
+            </div>
+            <div class="slip-item">
+              <span class="label">Kasbon</span>
+              <span class="value" id="slipKasbon"></span>
+            </div>
+          </div>
+
+          <div class="slip-total">
+            <div class="total-row">
+              <span>Total Pendapatan</span>
+              <span id="slipTotalPendapatan"></span>
+            </div>
+            <div class="total-row">
+              <span>Total Potongan</span>
+              <span id="slipTotalPotongan"></span>
+            </div>
+            <div class="total-row">
+              <span>TAKE HOME PAY</span>
+              <span id="slipTHP"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group no-print" style="margin-top: 20px;">
+        <button class="btn btn-success" onclick="printSlip()">
+          <span>&#128424;</span> Cetak Slip Gaji
+        </button>
+      </div>
+    </div>
+
+    <!-- Riwayat -->
+    <div id="historyContainer" class="history-container no-print" style="display: none;">
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon icon-lavender">&#128203;</span>
+          Riwayat Perhitungan
+          <button class="btn btn-danger btn-sm" style="margin-left: auto;" onclick="clearHistory()">Hapus Semua</button>
+        </h2>
+        <div style="overflow-x: auto;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Periode</th>
+                <th>Take Home Pay</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- DATA KARYAWAN -->
-  <div class="card input-card">
-    <div class="card-title">
-      <span class="icon-pill pill-pink">👤</span>
-      Data Karyawan
-    </div>
-    <div class="grid-2">
-      <div class="field">
-        <label>Nama Karyawan</label>
-        <input type="text" id="namaKaryawan" placeholder="Contoh: Siti Rahayu" />
-      </div>
-      <div class="field">
-        <label>Jabatan</label>
-        <input type="text" id="jabatan" placeholder="Contoh: Staff Administrasi" />
-      </div>
-    </div>
-    <div style="margin-top:18px;" class="field">
-      <label>Periode Gaji</label>
-      <input type="month" id="periode" />
-    </div>
-  </div>
+  <script>
+    // Data
+    const BULAN_LIST = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
 
-  <!-- PENDAPATAN -->
-  <div class="card input-card">
-    <div class="card-title">
-      <span class="icon-pill pill-lavender">💰</span>
-      Komponen Pendapatan
-    </div>
-    <div class="grid-2">
-      <div class="field">
-        <label>Gaji Pokok</label>
-        <div class="input-wrap">
-          <span class="input-prefix">Rp</span>
-          <input type="number" id="gajiPokok" class="has-prefix" placeholder="0" min="0" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Uang Kehadiran per Hari</label>
-        <div class="input-wrap">
-          <span class="input-prefix">Rp</span>
-          <input type="number" id="uangKehadiran" class="has-prefix" placeholder="0" min="0" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Jumlah Hari Kerja</label>
-        <input type="number" id="hariKerja" placeholder="0" min="0" max="31" />
-      </div>
-      <div class="field">
-        <label>Fee Lembur per Hari</label>
-        <div class="input-wrap">
-          <span class="input-prefix">Rp</span>
-          <input type="number" id="feeLembur" class="has-prefix" placeholder="0" min="0" />
-        </div>
-      </div>
-      <div class="field" style="grid-column:1/-1;">
-        <label>Jumlah Hari Lembur</label>
-        <input type="number" id="hariLembur" placeholder="0" min="0" max="31" />
-      </div>
-    </div>
-  </div>
+    let history = JSON.parse(localStorage.getItem('salaryHistory')) || [];
 
-  <!-- POTONGAN -->
-  <div class="card input-card">
-    <div class="card-title">
-      <span class="icon-pill pill-mint">✂️</span>
-      Komponen Potongan
-    </div>
-    <div class="grid-2">
-      <div class="field">
-        <label>Potongan Keterlambatan / Hari</label>
-        <div class="input-wrap">
-          <span class="input-prefix">Rp</span>
-          <input type="number" id="potonganTerlambat" class="has-prefix" placeholder="0" min="0" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Jumlah Hari Terlambat</label>
-        <input type="number" id="hariTerlambat" placeholder="0" min="0" max="31" />
-      </div>
-      <div class="field">
-        <label>Potongan Tidak Hadir / Hari</label>
-        <div class="input-wrap">
-          <span class="input-prefix">Rp</span>
-          <input type="number" id="potonganAbsen" class="has-prefix" placeholder="0" min="0" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Jumlah Hari Tidak Hadir</label>
-        <input type="number" id="hariAbsen" placeholder="0" min="0" max="31" />
-      </div>
-      <div class="field" style="grid-column:1/-1;">
-        <label>Kasbon / Pinjaman</label>
-        <div class="input-wrap">
-          <span class="input-prefix">Rp</span>
-          <input type="number" id="kasbon" class="has-prefix" placeholder="0" min="0" />
-        </div>
-      </div>
-    </div>
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      initPeriode();
+      initRupiahInputs();
+      renderHistory();
+    });
 
-    <div id="errorMsg" class="error-msg">
-      <span>⚠️</span>
-      <span id="errorText"></span>
-    </div>
-
-    <div class="btn-group" style="margin-top:24px;">
-      <button class="btn btn-primary" onclick="hitungGaji()">✨ Hitung Gaji</button>
-      <button class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
-    </div>
-  </div>
-
-  <!-- SLIP RESULT -->
-  <div class="result-section card" id="resultSection">
-    <div class="card-title">
-      <span class="icon-pill pill-pink">📄</span>
-      Slip Gaji
-    </div>
-
-    <div class="slip" id="slipGaji">
-      <div class="slip-header">
-        <div class="slip-company">✦ Payroll Division ✦</div>
-        <div class="slip-title">Slip Gaji Karyawan</div>
-        <div class="slip-period" id="slipPeriode">—</div>
-        <div class="slip-deco">
-          <div class="dot a"></div><div class="dot a"></div><div class="dot a"></div>
-          <div class="dot"></div><div class="dot"></div>
-        </div>
-      </div>
-
-      <div class="slip-emp">
-        <div class="emp-avatar">👩</div>
-        <div>
-          <div class="emp-name" id="slipNama">—</div>
-          <div class="emp-pos" id="slipJabatan">—</div>
-        </div>
-      </div>
-
-      <div class="slip-body">
-
-        <div class="sec-label">💵 Pendapatan</div>
-
-        <div class="slip-row">
-          <div class="s-label">Gaji Pokok</div>
-          <div class="s-val inc" id="rGajiPokok">Rp 0</div>
-        </div>
-        <div class="slip-row">
-          <div class="s-label">
-            Uang Kehadiran
-            <small id="rKehadiranDetail">0 hari × Rp 0</small>
-          </div>
-          <div class="s-val inc" id="rTotalKehadiran">Rp 0</div>
-        </div>
-        <div class="slip-row">
-          <div class="s-label">
-            Tunjangan Lembur
-            <small id="rLemburDetail">0 hari × Rp 0</small>
-          </div>
-          <div class="s-val inc" id="rTotalLembur">Rp 0</div>
-        </div>
-
-        <div class="total-box total-gross">
-          <span>🌿 Gaji Kotor</span>
-          <span id="rGajiKotor">Rp 0</span>
-        </div>
-
-        <div class="sec-label" style="margin-top:16px;">✂️ Potongan</div>
-
-        <div class="slip-row">
-          <div class="s-label">
-            Potongan Keterlambatan
-            <small id="rTerlambatDetail">0 hari × Rp 0</small>
-          </div>
-          <div class="s-val ded" id="rPotonganTerlambat">Rp 0</div>
-        </div>
-        <div class="slip-row">
-          <div class="s-label">
-            Potongan Tidak Hadir
-            <small id="rAbsenDetail">0 hari × Rp 0</small>
-          </div>
-          <div class="s-val ded" id="rPotonganAbsen">Rp 0</div>
-        </div>
-        <div class="slip-row">
-          <div class="s-label">Kasbon / Pinjaman</div>
-          <div class="s-val ded" id="rKasbon">Rp 0</div>
-        </div>
-
-        <div class="total-box total-ded">
-          <span>⛔ Total Potongan</span>
-          <span id="rTotalPotongan">Rp 0</span>
-        </div>
-
-        <div class="thp-box">
-          <div class="thp-lbl">
-            <strong></strong>Take Home Pay</strong>
-            Gaji Bersih yang Diterima
-          </div>
-          <div class="thp-val" id="rGajiBersih">Rp 0</div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="btn-group" style="margin-top:20px;">
-      <button class="btn btn-mint" onclick="window.print()">🖨️ Cetak Slip Gaji</button>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  (function() {
-    var now = new Date();
-    var y = now.getFullYear();
-    var m = String(now.getMonth() + 1).padStart(2, '0');
-    document.getElementById('periode').value = y + '-' + m;
-  })();
-
-  function rp(num) {
-    return 'Rp ' + Math.abs(num).toLocaleString('id-ID');
-  }
-
-  function getPeriodeLabel(val) {
-    if (!val) return '—';
-    var parts = val.split('-');
-    var bulan = ['Januari','Februari','Maret','April','Mei','Juni',
-                 'Juli','Agustus','September','Oktober','November','Desember'];
-    return bulan[parseInt(parts[1]) - 1] + ' ' + parts[0];
-  }
-
-  function showError(msg) {
-    var el = document.getElementById('errorMsg');
-    document.getElementById('errorText').textContent = msg;
-    el.classList.add('show');
-    setTimeout(function(){ el.classList.remove('show'); }, 5000);
-  }
-
-  function hitungGaji() {
-    var nama    = document.getElementById('namaKaryawan').value.trim();
-    var jabatan = document.getElementById('jabatan').value.trim();
-    var periode = document.getElementById('periode').value;
-
-    var gajiPokok          = parseFloat(document.getElementById('gajiPokok').value) || 0;
-    var uangKehadiran      = parseFloat(document.getElementById('uangKehadiran').value) || 0;
-    var hariKerja          = parseFloat(document.getElementById('hariKerja').value) || 0;
-    var feeLembur          = parseFloat(document.getElementById('feeLembur').value) || 0;
-    var hariLembur         = parseFloat(document.getElementById('hariLembur').value) || 0;
-    var potonganTerlambat  = parseFloat(document.getElementById('potonganTerlambat').value) || 0;
-    var hariTerlambat      = parseFloat(document.getElementById('hariTerlambat').value) || 0;
-    var potonganAbsen      = parseFloat(document.getElementById('potonganAbsen').value) || 0;
-    var hariAbsen          = parseFloat(document.getElementById('hariAbsen').value) || 0;
-    var kasbon             = parseFloat(document.getElementById('kasbon').value) || 0;
-
-    if (!nama)    { showError('Nama karyawan tidak boleh kosong!'); return; }
-    if (!jabatan) { showError('Jabatan tidak boleh kosong!'); return; }
-
-    var allNumbers = [gajiPokok, uangKehadiran, feeLembur, potonganTerlambat, potonganAbsen, kasbon, hariKerja, hariLembur, hariTerlambat, hariAbsen];
-    for (var i = 0; i < allNumbers.length; i++) {
-      if (allNumbers[i] < 0) { showError('Nilai tidak boleh negatif!'); return; }
-    }
-    if (hariKerja > 31 || hariLembur > 31 || hariTerlambat > 31 || hariAbsen > 31) {
-      showError('Jumlah hari tidak valid (maksimum 31 hari)!'); return;
+    // Initialize periode dropdowns
+    function initPeriode() {
+      const bulanSelect = document.getElementById('periodeBulan');
+      const tahunSelect = document.getElementById('periodeTahun');
+      const currentDate = new Date();
+      
+      // Set current month
+      bulanSelect.value = currentDate.getMonth() + 1;
+      
+      // Populate years
+      const currentYear = currentDate.getFullYear();
+      for (let year = currentYear - 2; year <= currentYear + 7; year++) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        if (year === currentYear) option.selected = true;
+        tahunSelect.appendChild(option);
+      }
     }
 
-    var totalKehadiran      = uangKehadiran * hariKerja;
-    var totalLembur         = feeLembur * hariLembur;
-    var gajiKotor           = gajiPokok + totalKehadiran + totalLembur;
-    var totalPotTerlambat   = potonganTerlambat * hariTerlambat;
-    var totalPotAbsen       = potonganAbsen * hariAbsen;
-    var totalPotongan       = totalPotTerlambat + totalPotAbsen + kasbon;
-    var gajiBersih          = gajiKotor - totalPotongan;
-
-    document.getElementById('slipNama').textContent      = nama;
-    document.getElementById('slipJabatan').textContent   = jabatan;
-    document.getElementById('slipPeriode').textContent   = 'Periode: ' + getPeriodeLabel(periode);
-
-    document.getElementById('rGajiPokok').textContent         = rp(gajiPokok);
-    document.getElementById('rTotalKehadiran').textContent    = rp(totalKehadiran);
-    document.getElementById('rKehadiranDetail').textContent   = hariKerja + ' hari \u00d7 ' + rp(uangKehadiran);
-    document.getElementById('rTotalLembur').textContent       = rp(totalLembur);
-    document.getElementById('rLemburDetail').textContent      = hariLembur + ' hari \u00d7 ' + rp(feeLembur);
-    document.getElementById('rGajiKotor').textContent         = rp(gajiKotor);
-
-    document.getElementById('rPotonganTerlambat').textContent = '- ' + rp(totalPotTerlambat);
-    document.getElementById('rTerlambatDetail').textContent   = hariTerlambat + ' hari \u00d7 ' + rp(potonganTerlambat);
-    document.getElementById('rPotonganAbsen').textContent     = '- ' + rp(totalPotAbsen);
-    document.getElementById('rAbsenDetail').textContent       = hariAbsen + ' hari \u00d7 ' + rp(potonganAbsen);
-    document.getElementById('rKasbon').textContent            = '- ' + rp(kasbon);
-    document.getElementById('rTotalPotongan').textContent     = '- ' + rp(totalPotongan);
-
-    var thpEl = document.getElementById('rGajiBersih');
-    if (gajiBersih < 0) {
-      thpEl.textContent = '- ' + rp(Math.abs(gajiBersih)) + ' ⚠️';
-    } else {
-      thpEl.textContent = rp(gajiBersih);
+    // Format to Rupiah
+    function formatRupiah(number) {
+      return 'Rp ' + number.toLocaleString('id-ID');
     }
 
-    var rs = document.getElementById('resultSection');
-    rs.classList.add('show');
-    rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+    // Parse Rupiah input to number
+    function parseRupiah(value) {
+      return parseInt(value.replace(/[^\d]/g, '')) || 0;
+    }
 
-  function resetForm() {
-    var ids = ['namaKaryawan','jabatan','gajiPokok','uangKehadiran','hariKerja',
-               'feeLembur','hariLembur','potonganTerlambat','hariTerlambat',
-               'potonganAbsen','hariAbsen','kasbon'];
-    ids.forEach(function(id){ document.getElementById(id).value = ''; });
-    var now = new Date();
-    document.getElementById('periode').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-    document.getElementById('resultSection').classList.remove('show');
-    document.getElementById('errorMsg').classList.remove('show');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-</script>
+    // Initialize Rupiah inputs
+    function initRupiahInputs() {
+      const rupiahInputs = [
+        'gajiPokok', 'uangKehadiran', 'uangLembur', 'bonus',
+        'potonganTerlambat', 'potonganTidakHadir', 'bpjs', 'kasbon'
+      ];
+
+      rupiahInputs.forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('input', function(e) {
+          const value = parseRupiah(e.target.value);
+          if (value > 0) {
+            e.target.value = formatRupiah(value);
+          } else {
+            e.target.value = '';
+          }
+        });
+      });
+    }
+
+    // Format periode
+    function formatPeriode(bulan, tahun) {
+      return BULAN_LIST[bulan - 1] + ' ' + tahun;
+    }
+
+    // Validate form
+    function validateForm() {
+      let isValid = true;
+      
+      // Reset errors
+      document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
+      document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+
+      const nama = document.getElementById('namaKaryawan').value.trim();
+      const jabatan = document.getElementById('jabatan').value.trim();
+      const gajiPokok = parseRupiah(document.getElementById('gajiPokok').value);
+
+      if (!nama) {
+        document.getElementById('errorNama').textContent = 'Nama karyawan wajib diisi';
+        document.getElementById('namaKaryawan').classList.add('error');
+        isValid = false;
+      }
+
+      if (!jabatan) {
+        document.getElementById('errorJabatan').textContent = 'Jabatan wajib diisi';
+        document.getElementById('jabatan').classList.add('error');
+        isValid = false;
+      }
+
+      if (gajiPokok <= 0) {
+        document.getElementById('errorGajiPokok').textContent = 'Gaji pokok wajib diisi dan harus lebih dari 0';
+        document.getElementById('gajiPokok').classList.add('error');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Calculate salary
+    document.getElementById('salaryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!validateForm()) return;
+
+      // Get values
+      const data = {
+        nama: document.getElementById('namaKaryawan').value.trim(),
+        jabatan: document.getElementById('jabatan').value.trim(),
+        periodeBulan: parseInt(document.getElementById('periodeBulan').value),
+        periodeTahun: parseInt(document.getElementById('periodeTahun').value),
+        gajiPokok: parseRupiah(document.getElementById('gajiPokok').value),
+        uangKehadiran: parseRupiah(document.getElementById('uangKehadiran').value),
+        uangLembur: parseRupiah(document.getElementById('uangLembur').value),
+        bonus: parseRupiah(document.getElementById('bonus').value),
+        potonganTerlambat: parseRupiah(document.getElementById('potonganTerlambat').value),
+        potonganTidakHadir: parseRupiah(document.getElementById('potonganTidakHadir').value),
+        bpjs: parseRupiah(document.getElementById('bpjs').value),
+        kasbon: parseRupiah(document.getElementById('kasbon').value)
+      };
+
+      // Calculate totals
+      const totalPendapatan = data.gajiPokok + data.uangKehadiran + data.uangLembur + data.bonus;
+      const totalPotongan = data.potonganTerlambat + data.potonganTidakHadir + data.bpjs + data.kasbon;
+      const takeHomePay = totalPendapatan - totalPotongan;
+
+      // Update slip
+      const periode = formatPeriode(data.periodeBulan, data.periodeTahun);
+      document.getElementById('slipPeriode').textContent = periode;
+      document.getElementById('slipNama').textContent = data.nama;
+      document.getElementById('slipJabatan').textContent = data.jabatan;
+      document.getElementById('slipPeriodeInfo').textContent = periode;
+      document.getElementById('slipTanggal').textContent = new Date().toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+      document.getElementById('slipGajiPokok').textContent = formatRupiah(data.gajiPokok);
+      document.getElementById('slipKehadiran').textContent = formatRupiah(data.uangKehadiran);
+      document.getElementById('slipLembur').textContent = formatRupiah(data.uangLembur);
+      document.getElementById('slipBonus').textContent = formatRupiah(data.bonus);
+      document.getElementById('slipTerlambat').textContent = formatRupiah(data.potonganTerlambat);
+      document.getElementById('slipTidakHadir').textContent = formatRupiah(data.potonganTidakHadir);
+      document.getElementById('slipBPJS').textContent = formatRupiah(data.bpjs);
+      document.getElementById('slipKasbon').textContent = formatRupiah(data.kasbon);
+      document.getElementById('slipTotalPendapatan').textContent = formatRupiah(totalPendapatan);
+      document.getElementById('slipTotalPotongan').textContent = formatRupiah(totalPotongan);
+      document.getElementById('slipTHP').textContent = formatRupiah(takeHomePay);
+
+      // Show slip
+      document.getElementById('slipContainer').classList.add('show');
+      document.getElementById('slipContainer').scrollIntoView({ behavior: 'smooth' });
+
+      // Save to history
+      const historyItem = {
+        id: Date.now(),
+        nama: data.nama,
+        jabatan: data.jabatan,
+        periode: periode,
+        takeHomePay: takeHomePay,
+        timestamp: new Date().toISOString()
+      };
+      history.unshift(historyItem);
+      localStorage.setItem('salaryHistory', JSON.stringify(history));
+      renderHistory();
+    });
+
+    // Reset form
+    function resetForm() {
+      document.getElementById('salaryForm').reset();
+      document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
+      document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+      document.getElementById('slipContainer').classList.remove('show');
+      initPeriode();
+    }
+
+    // Print slip
+    function printSlip() {
+      window.print();
+    }
+
+    // Render history
+    function renderHistory() {
+      const container = document.getElementById('historyContainer');
+      const tbody = document.getElementById('historyBody');
+
+      if (history.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'block';
+      tbody.innerHTML = history.map(item => `
+        <tr>
+          <td>${item.nama}</td>
+          <td>${item.periode}</td>
+          <td>${formatRupiah(item.takeHomePay)}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteHistory(${item.id})">Hapus</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Delete single history item
+    function deleteHistory(id) {
+      history = history.filter(item => item.id !== id);
+      localStorage.setItem('salaryHistory', JSON.stringify(history));
+      renderHistory();
+    }
+
+    // Clear all history
+    function clearHistory() {
+      if (confirm('Apakah Anda yakin ingin menghapus semua riwayat?')) {
+        history = [];
+        localStorage.setItem('salaryHistory', JSON.stringify(history));
+        renderHistory();
+      }
+    }
+  </script>
 </body>
 </html>
